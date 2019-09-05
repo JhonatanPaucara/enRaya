@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'En Raya'),
     );
   }
 }
@@ -25,12 +25,36 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  var _marcas = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '];
+  String _playerMark = ' ';
 
-  void _incrementCounter() {
+  void _incrementCounter(position) {
     setState(() {
-      _counter++;
+      if (_marcas[position] == ' ') {
+        _counter++;
+        _playerMark = 'O';
+        if (_counter % 2 == 0) {
+          _playerMark = 'X';
+        }
+        _marcas[position] = _playerMark;
+      }
     });
   }
+
+  void _resetGame() {
+    setState(() {
+      _counter = 0;
+      _marcas = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '];
+    });
+  }
+
+  /*void _finishGame(){
+    var player1;
+    var player2;
+    for (var i = 0; i < _marcas.length; i++) {
+      
+    }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -38,24 +62,32 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
+      body: GridView.count(
+        crossAxisCount: 3,
+        children: List.generate(9, (index) {
+          return Padding(
+            padding: EdgeInsets.all(5.0),
+            child: Container(
+              child: RaisedButton(
+                onPressed: () {
+                  _incrementCounter(index);
+                },
+                child: Text(
+                  _marcas[index],
+                  style: TextStyle(fontSize: 25.0),
+                ),
+                color: Colors.red,
+              ),
+              width: 50.0,
+              height: 50.0,
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
-            ),
-          ],
-        ),
+          );
+        }),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
+        onPressed: _resetGame,
+        backgroundColor: Colors.blue,
+        child: Icon(Icons.restore),
       ),
     );
   }
